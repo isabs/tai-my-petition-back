@@ -1,0 +1,92 @@
+{
+	"variables": [],
+	"info": {
+		"name": "tai-my-petition",
+		"_postman_id": "e861b393-05c9-3d87-14d6-996480fd6125",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "POST petitions - AddPetition",
+			"request": {
+				"url": "localhost:8733/Design_Time_Addresses/Service1/petitions",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"ImageUrl\":\"jakis url obrazka\",\n\t\"Tags\":[\"tag1\",\"tag2\",\"tag3\"],\n\t\"Text\":\"sample txt\",\n\t\"Title\":\"My mega title\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "POST petitions/1/sign - SignPetition",
+			"request": {
+				"url": " http://localhost:8733/Design_Time_Addresses/Service1/petitions/1/sign",
+				"method": "POST",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "GET petitions?own=true - GetPetitionForCurrentUser",
+			"request": {
+				"url": " http://localhost:8733/Design_Time_Addresses/Service1/petitions?own=true",
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"ImageUrl\":\"jakis url obrazka\",\n\t\"Tags\":[\"tag1\",\"tag2\",\"tag3\"],\n\t\"Text\":\"sample txt\",\n\t\"Title\":\"My mega title\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "GET petitions - GetAllPetitions",
+			"request": {
+				"url": "http://localhost:8733/Design_Time_Addresses/Service1/petitions",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "GET petition/1 GetPetition",
+			"request": {
+				"url": " http://localhost:8733/Design_Time_Addresses/Service1/petition/1",
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"ImageUrl\":\"jakis url obrazka\",\n\t\"Tags\":[\"tag1\",\"tag2\",\"tag3\"],\n\t\"Text\":\"sample txt\",\n\t\"Title\":\"My mega title\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE petitions/{petitionId} - DeletePetition",
+			"request": {
+				"url": "http://localhost:8733/Design_Time_Addresses/Service1/petitions/3",
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
