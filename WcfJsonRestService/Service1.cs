@@ -13,7 +13,7 @@ namespace WcfJsonRestService
     public class Service1 : IService1
     {
         //GET: /petitions
-        public List<PetitionShort> GetAllPetitions ( )
+        public List<PetitionShort> GetAllPetitions ( ) //works
         {
             List<PetitionShort> petitions = null;
 
@@ -29,7 +29,7 @@ namespace WcfJsonRestService
         }
 
         //GET: /petitions/{petitionId}
-        public PetitionNormal GetPetition ( string petitionId )
+        public PetitionNormal GetPetition ( string petitionId ) // works
         {
             PetitionNormal petition = null;
 
@@ -68,7 +68,7 @@ namespace WcfJsonRestService
         }
 
         //POST: /petitions 
-        public int AddPetition ( PetitionNormal petitionNormal )
+        public AddResult AddPetition ( PetitionNormal petitionNormal )
         {
             int end = 0;
 
@@ -81,7 +81,7 @@ namespace WcfJsonRestService
                 end = petition.PetitionId;
             }
 
-            return end;
+            return new AddResult () { PetitionId = end };
         }
 
         //POST: /petitions/{petitionId}/sign

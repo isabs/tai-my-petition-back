@@ -68,6 +68,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service1.cs" />
     <Compile Include="Translator.cs" />
+    <Compile Include="WebModel\AddResult.cs" />
     <Compile Include="WebModel\Person.cs" />
     <Compile Include="WebModel\Petition.cs" />
     <Compile Include="WebModel\RequestBody.cs" />

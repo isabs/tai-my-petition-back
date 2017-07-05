@@ -98,7 +98,7 @@ namespace WcfJsonRestService
 
                 Tags = web.Tags.ToDbModel (),
                 Creator = web.Owner.ToDbPerson (),
-                Members = new List<Person> ()
+                Members = web.Signs.Select ( person => person.ToDbPerson () ).ToList ()
             };
         }
     }
