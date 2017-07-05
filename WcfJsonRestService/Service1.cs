@@ -81,7 +81,7 @@ namespace WcfJsonRestService
 
                 using ( var db = new PetitionContext () )
                 {
-                    var creator = db.People.Find ( 1 );
+                    var creator = db.People.Find ( id );
                     var petition = new Model.Petition ()
                     {
                         Title = requestBody.Title,
@@ -143,7 +143,6 @@ namespace WcfJsonRestService
             }
         }
 
-        //TODO not implemented at all due to current DB Schema
         ///petitions/{petitionId}
         public void DeletePetition ( string petitionId )
         {
@@ -151,18 +150,10 @@ namespace WcfJsonRestService
             {
                 var petition = db.Petitions.Find ( petitionId.ToInt () );
 
-                //TODO check if petition owner is currently logged user
-
                 if ( petition != null )
                 {
                     petition.IsValid = false;
                     db.SaveChanges ();
-
-                    /*petition.Members.Add ( signer );
-
-                    db.Petitions.Add ( petition );
-                    db.SaveChanges ();*/
-                    //Console.WriteLine ( "petition with given id ({0}) is deleted here. But still exists.", petitionId );
                 }
                 else
                 {
