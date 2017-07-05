@@ -68,37 +68,19 @@ namespace WcfJsonRestService
         }
 
         //POST: /petitions 
-        public int AddPetition ( RequestBody requestBody )
+        public int AddPetition ( PetitionNormal petitionNormal )
         {
             int end = 0;
-            var cm = new ConnectionManager ();
-            var ht = new HeaderTools ();
 
-            var token = ht.GetAccesKey ();
-            if ( cm.ValidateToken ( token ) )
+            using ( var db = new PetitionContext () )
             {
-                var id = cm.GetCurrUserId ( token );
+                var petition = petitionNormal.ToDbPetition ();
+                db.Petitions.Add ( petition );
+                db.SaveChanges ();
 
-                using ( var db = new PetitionContext () )
-                {
-                    var creator = db.People.Find ( id );
-                    var petition = new Model.Petition ()
-                    {
-                        Title = requestBody.Title,
-                        Addressee = requestBody.Addressee,
-                        Tags = requestBody.Tags.ToDbModel (),
-                        Text = requestBody.Text,
-                        Url = requestBody.ImageUrl,
-                        Creator = creator,
-                        CreationDate = DateTime.Now,
-                        Members = new List<Model.Person> () { creator }
-                    };
-                    db.Petitions.Add ( petition );
-                    db.SaveChanges ();
-
-                    end = petition.PetitionId;
-                }
+                end = petition.PetitionId;
             }
+
             return end;
         }
 

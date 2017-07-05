@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
+using WcfJsonRestService.Model;
 
 namespace WcfJsonRestService
 {
@@ -52,7 +55,7 @@ namespace WcfJsonRestService
                 SignCount = modelPetition.Members.Count,
                 Owner = modelPetition.Creator.ToWeb (),
                 Text = modelPetition.Text,
-                ImageUrl = modelPetition.Url,
+                ImageBase64 = modelPetition.Url,
                 Signs = modelPetition.Members.ToWeb (),
                 Addressee = modelPetition.Addressee,
                 Description = modelPetition.Description
@@ -69,6 +72,34 @@ namespace WcfJsonRestService
         public static List<Model.Tag> ToDbModel ( this ICollection<string> tags )
         {
             return tags.Select ( tag => new Model.Tag { TagText = tag } ).ToList ();
+        }
+
+        public static Model.Person ToDbPerson ( this WebModel.Person p )
+        {
+            return new Person ()
+            {
+                FacebookId = p.FbId,
+                Name = p.Name
+            };
+        }
+
+        public static Model.Petition ToDbPetition ( this WebModel.PetitionNormal web )
+        {
+            return new Petition ()
+            {
+                Title = web.Title,
+                Text = web.Text,
+                Url = web.ImageBase64,
+                Addressee = web.Addressee,
+                Description = web.Description,
+                CreatorId = web.Owner.Id,
+                CreationDate = web.CreationDate,
+                IsValid = true,
+
+                Tags = web.Tags.ToDbModel (),
+                Creator = web.Owner.ToDbPerson (),
+                Members = new List<Person> ()
+            };
         }
     }
 }

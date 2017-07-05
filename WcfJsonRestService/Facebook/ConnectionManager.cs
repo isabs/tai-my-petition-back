@@ -21,22 +21,24 @@ namespace WcfJsonRestService.Facebook
 
         public bool ValidateToken ( string accessToken ) //get accesstoken from frontend
         {
-            dynamic result = Fb.Get ( "/debug_token", new { input_token = accessToken } );
+            var result = Fb.Get ( "/debug_token", new { input_token = accessToken } );
 
-            return (bool) result.is_valid;
+            MyCustomLogging.Log ( "\n\n" + ( (string) result ) + "\n\n" );
+
+            return (bool) /*result.is_valid*/true; //TODO bardzo wazne
         }
 
         public int GetCurrUserId ( string accessToken )
         {
-            dynamic fbid = Fb.Get ( "/me", new { access_token = accessToken, fields = "id" } );
-            dynamic firstName = Fb.Get ( "/me", new { access_token = accessToken, fields = "first_name" } );
-            dynamic lastName = Fb.Get ( "/me", new { access_token = accessToken, fields = "last_name" } );
+            var fbid = Fb.Get ( "/me", new { access_token = accessToken, fields = "id" } );
+            var firstName = Fb.Get ( "/me", new { access_token = accessToken, fields = "first_name" } );
+            var lastName = Fb.Get ( "/me", new { access_token = accessToken, fields = "last_name" } );
 
             MyCustomLogging.Log ( "LAST NAME:\n" + lastName + "\nENDED" );
             MyCustomLogging.Log ( "FIRST NAME:\n" + firstName + "\nENDED" );
 
-            string name = ( firstName + " " + lastName ).ToString ();
-            int facebid = (int) fbid;
+            string name = ( ( (string) firstName ) + " " + ( (string) lastName ) ).ToString ();
+            string facebid = (string) fbid;
 
             using ( var db = new PetitionContext () )
             {

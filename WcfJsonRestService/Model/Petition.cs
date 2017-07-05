@@ -12,7 +12,7 @@ namespace WcfJsonRestService.Model
         public string Addressee { get; set; }
         public string Description { get; set; }
         public int CreatorId { get; set; } //foreign key -> Person
-        public DateTime CreationDate { get; set; }
+        public long CreationDate { get; set; }
         public bool IsValid { get; set; }
 
 

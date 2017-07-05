@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using WcfJsonRestService.Extensions;
 using WcfJsonRestService.Model;
 
 namespace WcfJsonRestService.DB
@@ -8,22 +9,22 @@ namespace WcfJsonRestService.DB
     {
         private Person person1 = new Model.Person ()
         {
-            FacebookId = 12334321,
+            FacebookId = "12334321",
             Name = "Henryk Kowalski"
         };
         private Person person2 = new Model.Person ()
         {
-            FacebookId = 12335321,
+            FacebookId = "12335321",
             Name = "Marek Kowalski"
         };
         private Person person3 = new Model.Person ()
         {
-            FacebookId = 12135321,
+            FacebookId = "12135321",
             Name = "Eustachy Kowalski"
         };
         private Person person4 = new Model.Person ()
         {
-            FacebookId = 12137621,
+            FacebookId = "12137621",
             Name = "Kłapouchy Kowalski"
         };
 
@@ -35,7 +36,7 @@ namespace WcfJsonRestService.DB
             Addressee = "Kaczyński",
             Description = "Jakiś desc",
             CreatorId = 1,
-            CreationDate = DateTime.Now.AddDays ( -1 ),
+            CreationDate = DateTime.Now.AddDays ( -1 ).GetUnixTime (),
             IsValid = true,
             Members = new List<Person> (),
             Tags = new List<Tag> ()
@@ -48,7 +49,7 @@ namespace WcfJsonRestService.DB
             Addressee = "Tusk",
             Description = "Jakiś desc",
             CreatorId = 2,
-            CreationDate = DateTime.Now.AddDays ( 1 ),
+            CreationDate = DateTime.Now.AddDays ( 1 ).GetUnixTime (),
             IsValid = true,
             Members = new List<Person> (),
             Tags = new List<Tag> ()
@@ -61,7 +62,7 @@ namespace WcfJsonRestService.DB
             Addressee = "Kowalski",
             Description = "Jakiś desc",
             CreatorId = 1,
-            CreationDate = DateTime.Now.AddDays ( -1 ),
+            CreationDate = DateTime.Now.AddDays ( -1 ).GetUnixTime (),
             IsValid = false,
             Members = new List<Person> (),
             Tags = new List<Tag> ()
@@ -134,8 +135,8 @@ namespace WcfJsonRestService.DB
 
         public void GenerateAll ( )
         {
-            GenerateTags ();
-            GeneratePeople ();
+            //GenerateTags ();
+            //GeneratePeople ();
             GeneratePetitions ();
         }
     }

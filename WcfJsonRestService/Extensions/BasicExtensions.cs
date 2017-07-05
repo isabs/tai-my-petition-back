@@ -14,5 +14,11 @@ namespace WcfJsonRestService.Extensions
         {
             dbSet.RemoveRange ( dbSet );
         }
+
+        public static long GetUnixTime ( this DateTime date )
+        {
+            long epochTicks = new DateTime ( 1970, 1, 1 ).Ticks;
+            return ( ( date.Ticks - epochTicks ) / TimeSpan.TicksPerSecond );
+        }
     }
 }

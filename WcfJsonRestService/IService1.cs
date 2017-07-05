@@ -25,7 +25,7 @@ namespace WcfJsonRestService
         [WebInvoke ( Method = "POST",
             ResponseFormat = WebMessageFormat.Json,
             UriTemplate = "petitions" )]
-        int AddPetition ( RequestBody requestBody );
+        int AddPetition ( PetitionNormal petitionNormal );
 
         [OperationContract]
         [WebInvoke ( Method = "POST",
