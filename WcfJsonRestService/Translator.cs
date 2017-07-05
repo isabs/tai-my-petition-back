@@ -36,7 +36,8 @@ namespace WcfJsonRestService
                 Title = modelPetition.Title,
                 CreationDate = modelPetition.CreationDate,
                 SignCount = modelPetition.Members.Count,
-                Owner = modelPetition.Creator.ToWeb ()
+                Owner = modelPetition.Creator.ToWeb (),
+                Addressee = modelPetition.Addressee
             };
         }
 
@@ -52,7 +53,9 @@ namespace WcfJsonRestService
                 Owner = modelPetition.Creator.ToWeb (),
                 Text = modelPetition.Text,
                 ImageUrl = modelPetition.Url,
-                Signs = modelPetition.Members.ToWeb ()
+                Signs = modelPetition.Members.ToWeb (),
+                Addressee = modelPetition.Addressee,
+                Description = modelPetition.Description
             };
         }
 

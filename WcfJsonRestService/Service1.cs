@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using WcfJsonRestService.DB;
 using WcfJsonRestService.Extensions;
+using WcfJsonRestService.Facebook;
 using WcfJsonRestService.Model;
 using WcfJsonRestService.WebModel;
 using Person = WcfJsonRestService.WebModel.Person;
@@ -18,7 +19,10 @@ namespace WcfJsonRestService
 
             using ( var db = new PetitionContext () )
             {
-                petitions = ( from r in db.Petitions select r ).Select ( petition => petition ).ToList ().ToWeb ();
+                petitions = ( from r in db.Petitions select r )
+                    .Where ( petition => petition.IsValid )
+                    .Select ( petition => petition )
+                    .ToList ().ToWeb ();
             }
 
             return petitions;
@@ -37,55 +41,83 @@ namespace WcfJsonRestService
             return petition;
         }
 
-        //GET: /petitions?own=true - TODO owner is hardcoded now, will be fixed after integration with fb
+        //GET: /petitions?own=true
         public List<PetitionShort> GetPetitionForCurrentUser ( )
         {
             List<PetitionShort> petitions = null;
 
-            using ( var db = new PetitionContext () )
-            {
-                var currentUser = db.People.Find ( 1 );
+            var cm = new ConnectionManager ();
+            var ht = new HeaderTools ();
 
-                petitions = ( from r in db.Petitions select r )
-                    .Where ( petition => petition.Creator.PersonId == currentUser.PersonId )
-                    .ToList ().ToWeb ();
+            var token = ht.GetAccesKey ();
+            if ( cm.ValidateToken ( token ) )
+            {
+                var id = cm.GetCurrUserId ( token );
+
+                using ( var db = new PetitionContext () )
+                {
+                    var currentUser = db.People.Find ( id );
+
+                    petitions = ( from r in db.Petitions select r )
+                        .Where ( petition => petition.Creator.PersonId == currentUser.PersonId )
+                        .ToList ().ToWeb ();
+                }
             }
 
             return petitions;
         }
 
-        //POST: /petitions - TODO owner is hardcoded now, will be fixed after integration with fb
+        //POST: /petitions 
         public int AddPetition ( RequestBody requestBody )
         {
-            int id;
-            using ( var db = new PetitionContext () )
+            int end = 0;
+            var cm = new ConnectionManager ();
+            var ht = new HeaderTools ();
+
+            var token = ht.GetAccesKey ();
+            if ( cm.ValidateToken ( token ) )
             {
-                var creator = db.People.Find ( 1 ); //TODO should be user based on secret from api (I think..)
-                var petition = new Model.Petition ()
+                var id = cm.GetCurrUserId ( token );
+
+                using ( var db = new PetitionContext () )
                 {
-                    Title = requestBody.Title,
-                    Tags = requestBody.Tags.ToDbModel (),
-                    Text = requestBody.Text,
-                    Url = requestBody.ImageUrl,
-                    Creator = creator,
-                    CreationDate = DateTime.Now,
-                    Members = new List<Model.Person> () { creator }
-                };
-                db.Petitions.Add ( petition );
-                db.SaveChanges ();
+                    var creator = db.People.Find ( 1 );
+                    var petition = new Model.Petition ()
+                    {
+                        Title = requestBody.Title,
+                        Tags = requestBody.Tags.ToDbModel (),
+                        Text = requestBody.Text,
+                        Url = requestBody.ImageUrl,
+                        Creator = creator,
+                        CreationDate = DateTime.Now,
+                        Members = new List<Model.Person> () { creator }
+                    };
+                    db.Petitions.Add ( petition );
+                    db.SaveChanges ();
 
-                id = petition.PetitionId;
+                    end = petition.PetitionId;
+                }
             }
-
-            return id;
+            return end;
         }
 
-        //POST: /petitions/{petitionId}/sign  - TODO owner is hardcoded now, will be fixed after integration with fb
+        //POST: /petitions/{petitionId}/sign
         public void SignPetition ( string petitionId )
         {
+            var cm = new ConnectionManager ();
+            var ht = new HeaderTools ();
+
+            var token = ht.GetAccesKey ();
+            if ( !cm.ValidateToken ( token ) )
+            {
+                MyCustomLogging.Log ( "err" );
+                return;
+            }
+
+
             using ( var db = new PetitionContext () )
             {
-                var signer = db.People.Find ( 1 ); //TODO should be user based on secret from api (I think..)
+                var signer = db.People.Find ( token );
                 var petition = db.Petitions.Find ( petitionId.ToInt () );
 
                 if ( petition != null )
@@ -123,11 +155,14 @@ namespace WcfJsonRestService
 
                 if ( petition != null )
                 {
+                    petition.IsValid = false;
+                    db.SaveChanges ();
+
                     /*petition.Members.Add ( signer );
 
                     db.Petitions.Add ( petition );
                     db.SaveChanges ();*/
-                    Console.WriteLine ( "petition with given id ({0}) is deleted here. But still exists.", petitionId );
+                    //Console.WriteLine ( "petition with given id ({0}) is deleted here. But still exists.", petitionId );
                 }
                 else
                 {
