@@ -61,6 +61,12 @@ namespace WcfJsonRestService
             UriTemplate = "sampleReqBody" )]
         RequestBody GetSampleRequestBody ( );
 
+
+        [OperationContract]
+        [WebGet ( ResponseFormat = WebMessageFormat.Json,
+            UriTemplate = "dbops" )]
+        void CreateSamples ( );
+
         #endregion
     }
 }

@@ -5,6 +5,9 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using WcfJsonRestService;
+using WcfJsonRestService.DB;
+using WcfJsonRestService.Extensions;
 
 namespace WcfJsonRestServiceTest
 {
@@ -17,12 +20,22 @@ namespace WcfJsonRestServiceTest
         public void SetUp ( )
         {
             HttpClient = new HttpClient ();
+
+
         }
 
         [Test]
-        public class GetAllPetitions()
+        public void GetAllPetitions ( )
         {
-            
+            using ( var db = new PetitionContext () )
+            {
+                db.Petitions.Clear ();
+                db.People.Clear ();
+                db.Tags.Clear ();
+            }
+
+            DataGenerator dg = new DataGenerator ();
+            dg.GenerateAll ();
         }
 
     }

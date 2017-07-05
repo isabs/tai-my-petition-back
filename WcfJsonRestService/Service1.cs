@@ -85,6 +85,7 @@ namespace WcfJsonRestService
                     var petition = new Model.Petition ()
                     {
                         Title = requestBody.Title,
+                        Addressee = requestBody.Addressee,
                         Tags = requestBody.Tags.ToDbModel (),
                         Text = requestBody.Text,
                         Url = requestBody.ImageUrl,
@@ -203,6 +204,19 @@ namespace WcfJsonRestService
                 Text = "sample txt",
                 Title = "My mega title"
             };
+        }
+
+        public void CreateSamples ( )
+        {
+            using ( var db = new PetitionContext () )
+            {
+                db.Petitions.Clear ();
+                db.People.Clear ();
+                db.Tags.Clear ();
+            }
+
+            DataGenerator dg = new DataGenerator ();
+            dg.GenerateAll ();
         }
 
         #endregion

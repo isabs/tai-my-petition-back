@@ -54,6 +54,7 @@
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DB\DataGenerator.cs" />
     <Compile Include="DB\PetitionContext.cs" />
     <Compile Include="Extensions\BasicExtensions.cs" />
     <Compile Include="Facebook\ConnectionManager.cs" />
